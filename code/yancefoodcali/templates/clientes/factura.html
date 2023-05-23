@@ -1,0 +1,44 @@
+{% extends 'clientes/menu.html' %}
+{% block body %}
+    <div class="w-100 h-auto overflow-x-hidden d-flex flex-column justify-content-center align-content-center">
+        <div class="container-fluid w-100 d-flex justify-content-center align-content-center mt-4">
+            <h3>Gracias por su compra {{user.first_name}}</h3>
+        </div>
+        <div class="container-fluid w-100 d-flex justify-content-center align-content-center">
+            <div class="card w-50 mt-4 h-auto">
+                {% if detalles %}
+                <h5 class="card-header">Venta #{{detalles.0.fk_venta.pk}}</h5>
+                <div class="card-body w-100 d-flex flex-column justify-content-around">
+                    {% for detalle in detalles %}
+                        <div class="row w-100">
+                            <div class="col-5">
+                                <p class="m-0 text-center">{{detalle.fk_producto.nombre}}</p>
+                            </div>
+                            <div class="col-2">
+                                <p class="m-0 text-center">{{detalle.cantidad_comprada}}</p>
+                                
+                            </div>
+                            <div class="col-5">
+                                <p class="m-0 text-center">${{detalle.valor}}</p>
+                                
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                    <div class="row w-100">
+                        <div class="col-5">
+                            <p class="m-0 text-center fw-bold">Total</p>
+                        </div>
+                        <div class="col-2">
+                            <p class="m-0 text-center">{{cantidad}}</p>
+                            
+                        </div>
+                        <div class="col-5">
+                            <p class="m-0 text-center">${{total}}</p>
+                            
+                        </div>
+                    </div>
+                </div>
+              </div>        </div>
+    </div>
+{% endblock %}

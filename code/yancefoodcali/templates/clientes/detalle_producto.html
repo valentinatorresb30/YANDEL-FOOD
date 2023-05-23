@@ -1,0 +1,61 @@
+{% extends 'clientes/menu.html' %}
+
+{% block body %}
+    <div class="w-100 h-auto overflow-x-hidden d-flex justify-content-center align-content-center">
+        {% if detalle %}
+        <div class="card w-50 mt-4 h-auto">
+            <h5 class="card-header">{{detalle.producto_id.nombre}}</h5>
+            <div class="card-body w-auto d-flex flex-row justify-content-around">
+                <div class="container-fluid w-auto m-0 p-0 d-flex justify-content-center">
+                    <img src="{{detalle.producto_id.imagen.url}}"
+                    class="card-img-top d-flex img-fluid" style="width:
+                    300px; height: 300px; align-self: center;"
+                    alt="producto">  
+                </div>
+                <div class="vr h-auto"></div>
+                <div class="container-fluid w-auto d-flex flex-column justify-content-start m-0 p-0">
+                    <div class="card-title fw-bold">
+                        Descripción
+                    </div>
+                    <div class="row m-0">
+                        <p class="m-0">{{detalle.producto_id.descripcion}}</p>
+                    </div>
+                    <hr>
+                    <div class="card-title fw-bold">
+                        Detalle del producto
+                    </div>
+                    <div class="row m-0">
+                        <p class="m-0">{{detalle.producto_id.detalle_producto}}</p>
+                    </div>
+                    <hr>
+                    <div class="card-title fw-bold">
+                        Precio
+                    </div>
+                    <div class="row m-0">
+                        <p class="m-0">${{detalle.producto_id.precio_unitario}}</p>
+                    </div>
+                    <hr>
+                    <div class="card-title fw-bold">
+                        Existencia
+                    </div>
+                    <div class="row m-0">
+                        <p class="m-0">{{detalle.cantidad}}
+                            {% if detalle.cantidad > 1 %}
+                            Unidades
+                            {% else %}
+                            Unidad
+                            {% endif %}
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-2">
+                            <button class="btn btn-danger" onclick="volver('/cliente/menu')">Volver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        {% endif %}
+    </div>
+{% endblock %}

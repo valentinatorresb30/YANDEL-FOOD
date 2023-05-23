@@ -1,0 +1,33 @@
+body{
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    z-index: 1;
+}
+.menu{
+    position: absolute;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    z-index: 1;
+}
+.categoria{
+    width: 100vw;
+    display: flex;
+    flex-flow: column nowrap;
+}
+.tipo_cat{
+    width: 100vw;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+.sec-alert{
+    width: 30vw;
+    position: fixed;
+    top: 50px;
+    right: 0;
+    z-index: 1;
+}

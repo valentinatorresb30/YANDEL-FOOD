@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+            crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+        <title>Yandel Food Cali</title>
+    </head>
+    <body>
+        {% load humanize %}
+        <header>
+            <nav class="navbar navbar-expand-lg bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand fs-4 fw-bold text-bg-dark
+                        align-middle" href="{% url 'menu'%}">Yandel Food
+                        Cali</a>
+                    <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav fs-5 fw-medium">
+                            <li class="nav-item">
+                                <a class="nav-link active text-bg-dark
+                                    align-middle" aria-current="page"
+                                    href="{% url 'menu'%}">Menú</a>
+                            </li>
+                            <li class="nav-item">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div
+                    class="container-fluid w-50 h-100 p-0 m-0 d-flex flex-row justify-content-evenly align-items-center">
+                    {% if user.is_authenticated %}
+                    <h3 class="text-white m-0">Bienvenido {{user.username}}</h3>
+                    <button
+                        class="btn btn-dark w-auto h-auto p-1 d-flex align-middle"
+                        data-bs-toggle="modal" data-bs-target="#carrito">
+                        <span class="material-symbols-outlined">
+                            shopping_cart
+                        </span>
+                    </button>
+                    <a class="text-decoration-none p-0 m-0"
+                        href="{% url 'logout'%}">
+                        <button
+                            class="btn btn-danger w-100 h-100 p-1 d-flex align-middle">
+                            <span class="material-symbols-outlined">
+                                logout
+                            </span>
+                        </button>
+                    </a>
+                    {% else %}
+                    <a class="nav-link active text-bg-dark align-middle"
+                        aria-current="page"
+                        href="{% url 'login'%}">Welcome, new user. Please log
+                        in.</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
+        {% if messages %}
+        {% for message in messages %}
+        <div
+            class="w-100 h-auto d-flex justify-content-end bg-transparent position-absolute z-2 mt-2">
+            <div
+                class="alert {{ message.tags }} alert-dismissible w-50" style="z-index: 2;"
+                role="alert">
+                {{message}}
+                <button type="button" class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% block body %}
+        <div class="menu">
+            <!-- <div
+                class="w-100 h-auto d-flex justify-content-end bg-transparent" style="z-index: 6;">
+                <div
+                    class="alert alert-danger alert-dismissible w-50 z-1"
+                    role="alert">
+                    Hola
+                    <button type="button" class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+                </div>
+            </div> -->
+            {% if categorias %}
+            {% for cat in categorias %}
+            <div class="w-100 d-flex flex-column pt-2">
+                <div class="w-100 d-flex flex-row justify-content-center
+                    bg-dark-subtle">
+                    <h1 class=" m-0">{{cat.nombre_categoria}}</h1>
+                </div>
+                {% if inventario %}
+                <div class="d-flex flex-row flex-wrap justify-content-around">
+                    {% for dato in inventario %}
+                    {% if dato.producto_id.categoria_id.id == cat.id %}
+                    <div class="card mt-2 mb-2" style="width: 18rem;">
+                        {% if dato.producto_id.imagen %}
+                        <img src="{{dato.producto_id.imagen.url}}"
+                            class="card-img-top d-flex img-fluid" style="width:
+                            200px; height: 200px; align-self: center;"
+                            alt="producto">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column
+                            justify-content-center text-center">
+                            <h5 class="card-title text-wrap text-break">{{dato.producto_id.nombre}}</h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">${{dato.producto_id.precio_unitario | intcomma }}</h6>
+                            <p class="card-text">{{dato.producto_id.detalle_producto}}</p>
+                            <div class="row">
+                                <div
+                                    class="col-6    d-flex flex-row justify-content-center">
+                                    <button class="btn btn-primary d-flex
+                                    justify-content-center align-content-center" onclick="agregar_carrito('{{dato.id}}')" data-bs-toggle="modal" data-bs-target="#modalAdd">
+                                        <span class="material-symbols-outlined">
+                                            shopping_cart
+                                        </span>
+                                    </button>
+                                </div>
+                                <div
+                                    class="col-6 d-flex flex-row justify-content-center">
+                                    <button class="btn btn-info d-flex
+                                    justify-content-center align-content-center fw-bold"
+                                    onclick="redireccionar('detalle','{{dato.id}}')">
+                                        Detalles
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- <form action="/cliente/add_carrito" hidden="true"
+                        method="post" id="form-carrito-{{dato.id}}">
+                        {% csrf_token %}
+                        <input type="text" name="inv_id" value="{{dato.id}}">
+                        <input type="text" name="user_id" value="{{user.id}}">
+                        <input type="text" name="cantidad" value="1">
+                    </form> -->
+                    {% endfor %}
+                    {% else %}
+                    <h2>Inventario vacio</h2>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endblock body %}
+        {% block carrito %}
+        <div class="modal fade" id="carrito" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="carritoLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="carritoLabel">Carrito
+                            de compra</h1>
+                        <button type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body table-responsive">
+                        {% if carrito %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center h-auto">Producto</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-center">Valor</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <!-- <form action="" method="post"> -->
+                                    <!-- {% csrf_token %} -->
+                                    {% for car in carrito %}
+                                    <tr>
+                                        <!-- <input type="hidden" name="" value="{{car.id}}"> -->
+                                        <td colspan="1" class="d-flex flex-column justify-content-center align-items-center">
+                                            <img src="{{car.fk_producto.imagen.url}}" class="img-fluid w-25 h-25" alt>
+                                            {{car.fk_producto.nombre}}
+                                        </td>
+                                        <td class="text-center">{{car.cantidad}}</td>
+                                        <td class="text-center">${{car.valor | intcomma}}</td>
+                                        <td >
+                                            <a href="{% url 'eliminar' car.id %}" class="btn btn-danger p-1 d-flex justify-content-center w-50">
+                                                <span class="material-symbols-outlined">
+                                                    delete
+                                                </span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                <!-- </form> -->
+                            </tbody>
+                            <tfoot class="table-group-divider">
+                                <tr>
+                                    <td class="text-center text-uppercase fw-bold">total</td>
+                                    <td></td>
+                                    <td>${{total_carrito | intcomma}}</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        {% else %}
+                        <h3>Carrito vacio</h3>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger"
+                            data-bs-dismiss="modal">Cerrar</button>
+                            <a href="{% url 'finalizar' %}" class="btn btn-success">Finalizar</a>
+                        <!-- <button type="button" class="btn btn-success">Finalizar</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock carrito %}
+        {% block cantidad-modal %}
+        <div class="modal fade" id="modalAdd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-2"
+            aria-labelledby="modalAddLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalAddLabel">Cantidad a comprar</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/cliente/add_carrito" method="post" id="form-add">
+                            {% csrf_token %}
+                            <input type="hidden" value="" name="id_inv" id="id_inv">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="cant" class="form-label fw-bold">¿Cuantos va a llevar?</label>
+                                    <input type="text" class="form-control" name="cant" id="cant" required>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" form="form-add" class="btn btn-success">Agregar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock cantidad-modal %}
+
+    </body>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+        integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
+        crossorigin="anonymous"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
+        crossorigin="anonymous"></script>
+    <script src="{% static 'js/logic.js' %}"></script>
+
+</html>
